@@ -19,9 +19,8 @@ function App() {
           </div>
           <h2 class="content__title">Все пиццы</h2>
           <div class="content__items">
-            {[...new Array(9)].map(() => (
-              <PizzaBlock price={495} />
-            ))}
+            <PizzaBlock title="Гавайская" price={495} />
+            <PizzaBlock title="Пицца-бургер" price={375} />
           </div>
         </div>
       </div>
