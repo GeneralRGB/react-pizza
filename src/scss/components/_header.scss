@@ -1,4 +1,4 @@
-@import '../variables';
+@import "../variables";
 
 .header {
   border-bottom: 1px solid $gray-line;
@@ -27,6 +27,16 @@
 
     p {
       color: #7b7b7b;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+
+    &__logo {
+      margin-bottom: 25px;
     }
   }
 }
