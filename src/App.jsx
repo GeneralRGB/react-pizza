@@ -9,7 +9,7 @@ import "./scss/app.scss";
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
-import Card from "./pages/Card";
+import Cart from "./pages/Cart";
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
         <div className="container">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/card" element={<Card />} />
+            <Route path="/Cart" element={<Cart />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

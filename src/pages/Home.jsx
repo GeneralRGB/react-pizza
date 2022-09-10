@@ -12,6 +12,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
+    window.scrollTo(0, 0);
     fetch("https://6307af893a2114bac76922d9.mockapi.io/photos/react-pizza")
       .then((response) => response.json())
       .then((responseData) => {
