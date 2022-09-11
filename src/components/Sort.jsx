@@ -1,14 +1,17 @@
 import React from "react";
 
-function Sort() {
+function Sort({
+  sortTypeId,
+  setSortTypeId,
+  sortOptions,
+  setIsSortTypeAsc,
+  isSortTypeAsc,
+}) {
+  // Hooks
   const [isVisible, setIsVisible] = React.useState(false);
-  const [sortOptionId, setSortOptionId] = React.useState(0);
-
-  const sortOptions = ["популярности", "цене", "алфавиту"];
-  const sortOption = sortOptions[sortOptionId];
 
   const setSortOption = (index) => {
-    setSortOptionId(index);
+    setSortTypeId(index);
     setIsVisible(false);
   };
 
@@ -16,6 +19,7 @@ function Sort() {
     <div className="sort">
       <div className="sort__label">
         <svg
+          className={isSortTypeAsc ? "ascending" : ""}
           width="10"
           height="6"
           viewBox="0 0 10 6"
@@ -28,18 +32,25 @@ function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setIsVisible((prev) => !prev)}>{sortOption}</span>
+        <span onClick={() => setIsVisible((prev) => !prev)}>
+          {sortOptions[sortTypeId].name}
+        </span>
       </div>
       {isVisible && (
         <div className="sort__popup">
           <ul>
             {sortOptions.map((option, index) => (
               <li
-                className={index === sortOptionId ? "active" : ""}
-                key={option}
-                onClick={() => setSortOption(index)}
+                className={index === sortTypeId ? "active" : ""}
+                key={option.name}
+                onClick={() => {
+                  index === sortTypeId
+                    ? setIsSortTypeAsc(!isSortTypeAsc)
+                    : setIsSortTypeAsc(true);
+                  setSortOption(index);
+                }}
               >
-                {option}
+                {option.name}
               </li>
             ))}
           </ul>

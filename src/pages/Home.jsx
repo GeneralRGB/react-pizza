@@ -7,27 +7,51 @@ import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 
 export default function Home() {
+  // Data
+  const sortOptions = [
+    { name: "популярности", sortParam: "rating" },
+    { name: "цене", sortParam: "price" },
+    { name: "алфавиту", sortParam: "title" },
+  ];
+  const apiURL =
+    "https://6307af893a2114bac76922d9.mockapi.io/photos/react-pizza";
+  // let sortType = "asc";
+
   // Hooks
   const [pizzas, setPizzas] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [categoryId, setCategoryId] = React.useState(0);
+  const [sortTypeId, setSortTypeId] = React.useState(0);
+  const [isSortTypeAsc, setIsSortTypeAsc] = React.useState(true);
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
-    fetch("https://6307af893a2114bac76922d9.mockapi.io/photos/react-pizza")
+    setIsLoading(true);
+
+    const category = categoryId !== 0 ? `category=${categoryId}&` : "";
+    const sortType = isSortTypeAsc ? "asc" : "desc";
+    const sort = `sortBy=${sortOptions[sortTypeId].sortParam}&order=${sortType}`;
+    const fetchParams = "?" + category + sort;
+
+    fetch(apiURL + fetchParams)
       .then((response) => response.json())
       .then((responseData) => {
-        setTimeout(() => {
-          setPizzas(responseData);
-          setIsLoading(false);
-        }, 500);
+        setPizzas(responseData);
+        setIsLoading(false);
       });
-  }, []);
+  }, [categoryId, sortTypeId, isSortTypeAsc]);
 
   return (
     <>
       <div className="content__top">
-        <Categories />
-        <Sort />
+        <Categories categoryId={categoryId} setCategoryId={setCategoryId} />
+        <Sort
+          sortTypeId={sortTypeId}
+          setSortTypeId={setSortTypeId}
+          sortOptions={sortOptions}
+          isSortTypeAsc={isSortTypeAsc}
+          setIsSortTypeAsc={setIsSortTypeAsc}
+        />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">

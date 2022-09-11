@@ -1,4 +1,4 @@
-@import '../variables';
+@import "../variables";
 
 .sort {
   position: relative;
@@ -8,6 +8,10 @@
 
     svg {
       margin-right: 8px;
+    }
+
+    svg.ascending {
+      transform: rotateZ(180deg);
     }
 
     b {
