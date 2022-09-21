@@ -31,7 +31,8 @@ export default function Home({ searchValue }) {
     const category = categoryId !== 0 ? `category=${categoryId}&` : "";
     const sortType = isSortTypeAsc ? "asc" : "desc";
     const sort = `sortBy=${sortOptions[sortTypeId].sortParam}&order=${sortType}`;
-    const fetchParams = "?" + category + sort;
+    const search = searchValue ? `search=${searchValue}&` : "";
+    const fetchParams = "?" + category + search + sort;
 
     fetch(apiURL + fetchParams)
       .then((response) => response.json())
@@ -39,16 +40,14 @@ export default function Home({ searchValue }) {
         setPizzas(responseData);
         setIsLoading(false);
       });
-  }, [categoryId, sortTypeId, isSortTypeAsc]);
+  }, [categoryId, sortTypeId, isSortTypeAsc, searchValue]);
 
   const skeletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
   ));
-  const pizzaElements = pizzas
-    .filter((item) =>
-      item.title.toLowerCase().includes(searchValue.toLowerCase().trim())
-    )
-    .map((item) => <PizzaBlock key={item.id} {...item} />);
+  const pizzaElements = pizzas.map((item) => (
+    <PizzaBlock key={item.id} {...item} />
+  ));
 
   return (
     <>
