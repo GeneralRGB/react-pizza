@@ -1,6 +1,10 @@
 import React from "react";
 
-export default function Categories({ categoryId, setCategoryId }) {
+export default function Categories({
+  categoryId,
+  setCategoryId,
+  setCurrentPage,
+}) {
   const categories = [
     "Все",
     "Мясные",
@@ -17,7 +21,10 @@ export default function Categories({ categoryId, setCategoryId }) {
           <li
             key={category}
             className={categoryId === index ? "active" : ""}
-            onClick={() => setCategoryId(index)}
+            onClick={() => {
+              setCategoryId(index);
+              setCurrentPage(1);
+            }}
           >
             {category}
           </li>

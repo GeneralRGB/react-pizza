@@ -5,6 +5,7 @@ import Categories from "../components/Categories";
 import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
+import Pagination from "../components/Pagination";
 
 // Data
 const sortOptions = [
@@ -22,6 +23,8 @@ export default function Home({ searchValue }) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [categoryId, setCategoryId] = React.useState(0);
   const [sortTypeId, setSortTypeId] = React.useState(0);
+  const [pagesAmount, setPagesAmount] = React.useState(0);
+  const [currentPage, setCurrentPage] = React.useState(1);
   const [isSortTypeAsc, setIsSortTypeAsc] = React.useState(true);
 
   React.useEffect(() => {
@@ -32,15 +35,23 @@ export default function Home({ searchValue }) {
     const sortType = isSortTypeAsc ? "asc" : "desc";
     const sort = `sortBy=${sortOptions[sortTypeId].sortParam}&order=${sortType}`;
     const search = searchValue ? `search=${searchValue}&` : "";
-    const fetchParams = "?" + category + search + sort;
+    const pages = `page=${currentPage}&limit=4&`;
+    const fetchParams = category + search + sort;
 
-    fetch(apiURL + fetchParams)
+    fetch(apiURL + "?" + pages + fetchParams)
       .then((response) => response.json())
       .then((responseData) => {
-        setPizzas(responseData);
         setIsLoading(false);
+        setPizzas(responseData);
+        console.log(apiURL + "?" + pages + fetchParams);
       });
-  }, [categoryId, sortTypeId, isSortTypeAsc, searchValue]);
+
+    fetch(apiURL + "?" + fetchParams)
+      .then((response) => response.json())
+      .then((responseData) => {
+        setPagesAmount(Math.ceil(responseData.length / 4));
+      });
+  }, [categoryId, sortTypeId, isSortTypeAsc, searchValue, currentPage]);
 
   const skeletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
@@ -52,7 +63,11 @@ export default function Home({ searchValue }) {
   return (
     <>
       <div className="content__top">
-        <Categories categoryId={categoryId} setCategoryId={setCategoryId} />
+        <Categories
+          categoryId={categoryId}
+          setCategoryId={setCategoryId}
+          setCurrentPage={setCurrentPage}
+        />
         <Sort
           sortTypeId={sortTypeId}
           setSortTypeId={setSortTypeId}
@@ -65,6 +80,10 @@ export default function Home({ searchValue }) {
       <div className="content__items">
         {isLoading ? skeletons : pizzaElements}
       </div>
+      <Pagination
+        onPageChange={(number) => setCurrentPage(number)}
+        pagesAmount={pagesAmount}
+      />
     </>
   );
 }

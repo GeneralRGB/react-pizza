@@ -1,0 +1,47 @@
+.root {
+  :global {
+    .selected {
+      a {
+        background-color: #fe5f1e;
+        color: white;
+      }
+    }
+  }
+
+  li {
+    display: inline-block;
+    a {
+      display: inline-block;
+
+      width: 40px;
+      height: 40px;
+
+      padding: 10px;
+
+      text-align: center;
+
+      cursor: pointer;
+      border-radius: 50%;
+      border: 1px solid #fe5f1e;
+
+      transition: background-color 0.1s ease-in-out;
+
+      font-size: 18px;
+      line-height: 1;
+      font-family: "Nunito";
+      font-weight: bold;
+      user-select: none;
+      color: #fe5f1e;
+      transition: color 0.1s ease-in-out;
+
+      &:hover {
+        background-color: #fe5f1e;
+        color: white;
+      }
+    }
+  }
+
+  li:not(:last-child) {
+    margin-right: 15px;
+  }
+}
