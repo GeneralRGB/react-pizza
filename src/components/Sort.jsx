@@ -1,17 +1,17 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-function Sort({
-  sortTypeId,
-  setSortTypeId,
-  sortOptions,
-  setIsSortTypeAsc,
-  isSortTypeAsc,
-}) {
+import { setIsSortTypeAsc, setSortId } from "../redux/slices/filterSlice";
+
+function Sort({ sortOptions }) {
+  const dispatch = useDispatch();
+  const sort = useSelector((state) => state.filterSlice);
+
   // Hooks
   const [isVisible, setIsVisible] = React.useState(false);
 
   const setSortOption = (index) => {
-    setSortTypeId(index);
+    dispatch(setSortId(index));
     setIsVisible(false);
   };
 
@@ -19,7 +19,7 @@ function Sort({
     <div className="sort">
       <div className="sort__label">
         <svg
-          className={isSortTypeAsc ? "ascending" : ""}
+          className={sort.sortType.isSortTypeAsc ? "ascending" : ""}
           width="10"
           height="6"
           viewBox="0 0 10 6"
@@ -33,7 +33,7 @@ function Sort({
         </svg>
         <b>Сортировка по:</b>
         <span onClick={() => setIsVisible((prev) => !prev)}>
-          {sortOptions[sortTypeId].name}
+          {sortOptions[sort.sortType.sortTypeId].name}
         </span>
       </div>
       {isVisible && (
@@ -41,12 +41,12 @@ function Sort({
           <ul>
             {sortOptions.map((option, index) => (
               <li
-                className={index === sortTypeId ? "active" : ""}
+                className={index === sort.sortType.sortTypeId ? "active" : ""}
                 key={option.name}
                 onClick={() => {
-                  index === sortTypeId
-                    ? setIsSortTypeAsc(!isSortTypeAsc)
-                    : setIsSortTypeAsc(true);
+                  index === sort.sortType.sortTypeId
+                    ? dispatch(setIsSortTypeAsc(!sort.sortType.isSortTypeAsc))
+                    : dispatch(setIsSortTypeAsc(true));
                   setSortOption(index);
                 }}
               >
