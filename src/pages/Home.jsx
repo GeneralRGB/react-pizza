@@ -1,5 +1,6 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 // Modules
 import Categories from "../components/Categories";
@@ -7,6 +8,9 @@ import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
+
+// Redux
+import { setCurrentPage } from "../redux/slices/filterSlice";
 
 // Data
 const sortOptions = [
@@ -20,11 +24,17 @@ export default function Home({ searchValue }) {
   // Redux
   const sortSlice = useSelector((state) => state.filterSlice);
 
+  const dispatch = useDispatch();
+
   // Hooks
   const [pizzas, setPizzas] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [pagesAmount, setPagesAmount] = React.useState(0);
-  const [currentPage, setCurrentPage] = React.useState(1);
+  // const [currentPage, setCurrentPage] = React.useState(1);
+
+  const onPageChange = (page) => {
+    dispatch(setCurrentPage(page));
+  };
 
   // Data fetching
   React.useEffect(() => {
@@ -38,22 +48,19 @@ export default function Home({ searchValue }) {
       sortOptions[sortSlice.sortType.sortTypeId].sortParam
     }&order=${sortType}`;
     const search = searchValue ? `search=${searchValue}&` : "";
-    const pages = `page=${currentPage}&limit=4&`;
+    const pages = `page=${sortSlice.currentPage}&limit=4&`;
     const fetchParams = category + search + sort;
 
-    fetch(apiURL + "?" + pages + fetchParams)
-      .then((response) => response.json())
-      .then((responseData) => {
-        setIsLoading(false);
-        setPizzas(responseData);
-      });
+    // Requests
+    axios.get(apiURL + "?" + pages + fetchParams).then((response) => {
+      setIsLoading(false);
+      setPizzas(response.data);
+    });
 
-    fetch(apiURL + "?" + fetchParams)
-      .then((response) => response.json())
-      .then((responseData) => {
-        setPagesAmount(Math.ceil(responseData.length / 4));
-      });
-  }, [sortSlice, searchValue, currentPage]);
+    axios
+      .get(apiURL + "?" + fetchParams)
+      .then((response) => setPagesAmount(Math.ceil(response.data.length / 4)));
+  }, [sortSlice, searchValue]);
 
   // Pizza blocks
   const skeletons = [...new Array(4)].map((_, index) => (
@@ -66,17 +73,14 @@ export default function Home({ searchValue }) {
   return (
     <>
       <div className="content__top">
-        <Categories setCurrentPage={setCurrentPage} />
+        <Categories setCurrentPage={onPageChange} />
         <Sort sortOptions={sortOptions} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
         {isLoading ? skeletons : pizzaElements}
       </div>
-      <Pagination
-        onPageChange={(number) => setCurrentPage(number)}
-        pagesAmount={pagesAmount}
-      />
+      <Pagination onPageChange={onPageChange} pagesAmount={pagesAmount} />
     </>
   );
 }
