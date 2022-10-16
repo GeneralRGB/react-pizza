@@ -9,6 +9,7 @@ const initialValue = {
     sortParam: "rating",
     isSortTypeAsc: true,
   },
+  loaded: false,
 };
 
 const filterSlice = createSlice({
@@ -27,10 +28,24 @@ const filterSlice = createSlice({
     setCurrentPage(state, { payload }) {
       state.currentPage = payload;
     },
+    setFilters(state, { payload }) {
+      console.log("payload", payload);
+      state.currentPage = Number(payload.currentPage);
+      state.categoryId = Number(payload.categoryId);
+      state.sortType.sortTypeId = Number(payload.sortTypeId);
+      state.loaded = true;
+      state.sortType.isSortTypeAsc =
+        payload.isSortTypeAsc === "true" ? true : false;
+    },
   },
 });
 
-export const { setCategoryId, setIsSortTypeAsc, setSortId, setCurrentPage } =
-  filterSlice.actions;
+export const {
+  setCategoryId,
+  setIsSortTypeAsc,
+  setSortId,
+  setCurrentPage,
+  setFilters,
+} = filterSlice.actions;
 
 export default filterSlice.reducer;
