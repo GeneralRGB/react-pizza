@@ -9,6 +9,19 @@ function Sort({ sortOptions }) {
 
   // Hooks
   const [isVisible, setIsVisible] = React.useState(false);
+  const sortRef = React.useRef();
+
+  // Close popup when user clicks outside.
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.path.includes(sortRef.current)) setIsVisible(false);
+    };
+    window.document.body.addEventListener("click", handleClickOutside);
+
+    // Remove event listener when component is unmounted
+    return () =>
+      window.document.body.removeEventListener("click", handleClickOutside);
+  }, []);
 
   const setSortOption = (index) => {
     dispatch(setSortId(index));
@@ -16,7 +29,7 @@ function Sort({ sortOptions }) {
   };
 
   return (
-    <div className="sort">
+    <div className="sort" ref={sortRef}>
       <div className="sort__label">
         <svg
           className={sort.sortType.isSortTypeAsc ? "ascending" : ""}
