@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { setCategoryId } from "../redux/slices/filterSlice";
+import { setCategoryId, setCurrentPage } from "../redux/slices/filterSlice";
 
 const categories = [
   "Все",
@@ -11,7 +11,7 @@ const categories = [
   "Острые",
   "Закрытые",
 ];
-export default function Categories({ setCurrentPage }) {
+export default function Categories() {
   const categoriesSlice = useSelector((state) => state.filterSlice);
   const dispatch = useDispatch();
 
@@ -24,7 +24,7 @@ export default function Categories({ setCurrentPage }) {
             className={categoriesSlice.categoryId === index ? "active" : ""}
             onClick={() => {
               dispatch(setCategoryId(index));
-              setCurrentPage(1);
+              dispatch(setCurrentPage(1));
             }}
           >
             {category}

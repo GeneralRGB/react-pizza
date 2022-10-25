@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 import qs from "qs";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +11,8 @@ import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
 
 // Redux
-import { setCurrentPage, setFilters } from "../redux/slices/filterSlice";
+import { setFilters } from "../redux/slices/filterSlice";
+import { fetchPizzas } from "../redux/slices/pizzaSlice";
 
 // Data
 const sortOptions = [
@@ -26,19 +26,12 @@ export default function Home({ searchValue }) {
   // Redux
   const sortSlice = useSelector((state) => state.filterSlice);
   const dispatch = useDispatch();
+  const { items, status } = useSelector((state) => state.pizzaSlice);
 
   // Hooks
-  const [pizzas, setPizzas] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [pagesAmount, setPagesAmount] = React.useState(0);
   const navigate = useNavigate();
   const firstLoad = React.useRef(true);
   const isMounted = React.useRef(false);
-
-  // Functions
-  const onPageChange = (page) => {
-    dispatch(setCurrentPage(page));
-  };
 
   // Processing URL parameters on the first load
   React.useEffect(() => {
@@ -53,13 +46,11 @@ export default function Home({ searchValue }) {
 
   // Data fetching
   React.useEffect(() => {
+    // Fix for bug with double fetching on the first load
     if (firstLoad.current) {
       firstLoad.current = false;
       return;
     }
-
-    window.scrollTo(0, 0);
-    setIsLoading(true);
 
     // Setting URL parameters
     const category =
@@ -72,16 +63,11 @@ export default function Home({ searchValue }) {
     const pages = `page=${sortSlice.currentPage}&limit=4&`;
     const fetchParams = category + search + sort;
 
-    // Requests
-    axios.get(apiURL + "?" + pages + fetchParams).then((response) => {
-      setIsLoading(false);
-      setPizzas(response.data);
-    });
-    // Number of pages
-    axios
-      .get(apiURL + "?" + fetchParams)
-      .then((response) => setPagesAmount(Math.ceil(response.data.length / 4)));
-  }, [sortSlice, searchValue, firstLoad]);
+    // Requesting pizzas & page count
+    dispatch(fetchPizzas({ apiURL, pages, fetchParams }));
+
+    window.scrollTo(0, 0);
+  }, [sortSlice, searchValue, firstLoad, dispatch]);
 
   // Setting URL parameters
   React.useEffect(() => {
@@ -108,21 +94,27 @@ export default function Home({ searchValue }) {
   const skeletons = [...new Array(4)].map((_, index) => (
     <Skeleton key={index} />
   ));
-  const pizzaElements = pizzas.map((item) => (
+  const pizzaElements = items.map((item) => (
     <PizzaBlock key={item.id} {...item} />
   ));
 
   return (
     <>
       <div className="content__top">
-        <Categories setCurrentPage={onPageChange} />
+        <Categories />
         <Sort sortOptions={sortOptions} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
-        {isLoading ? skeletons : pizzaElements}
+        {status === "error" ? (
+          <h2 className="content__error-info">Произошла ошибка 😢</h2>
+        ) : status === "loading" ? (
+          skeletons
+        ) : (
+          pizzaElements
+        )}
       </div>
-      <Pagination onPageChange={onPageChange} pagesAmount={pagesAmount} />
+      <Pagination />
     </>
   );
 }

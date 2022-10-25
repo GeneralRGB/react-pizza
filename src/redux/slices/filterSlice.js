@@ -29,7 +29,6 @@ const filterSlice = createSlice({
       state.currentPage = payload;
     },
     setFilters(state, { payload }) {
-      console.log("payload", payload);
       state.currentPage = Number(payload.currentPage);
       state.categoryId = Number(payload.categoryId);
       state.sortType.sortTypeId = Number(payload.sortTypeId);
