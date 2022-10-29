@@ -3,15 +3,17 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchPizzas = createAsyncThunk(
   "pizzaSlice/loadPizzas",
-  async ({ apiURL, pages, fetchParams }) => {
+  async ({ apiURL, pages, fetchParams }, thunkApi) => {
     const { data } = await axios.get(apiURL + "?" + pages + fetchParams);
+    if (data.length === 0)
+      return thunkApi.rejectWithValue("No pizzas were fetched");
 
     const unfilteredData = await (
       await axios.get(apiURL + "?" + fetchParams)
     ).data.length;
     const pagesAmount = Math.ceil(unfilteredData / 4);
 
-    return { data, pagesAmount };
+    return thunkApi.fulfillWithValue({ data, pagesAmount });
   }
 );
 
@@ -34,7 +36,8 @@ const pizzaSlice = createSlice({
       state.items = [];
       state.status = "loading";
     },
-    [fetchPizzas.fulfilled]: (state, { payload }) => {
+    [fetchPizzas.fulfilled]: (state, { payload, type }) => {
+      // console.log(type);
       state.items = payload.data;
       state.pagesAmount = payload.pagesAmount;
       state.status = "success";

@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import Search from "./Search";
+import { selectCart } from "../redux/slices/cartSlice";
 
-export default function Header({ searchValue, setSearchValue }) {
-  const { items, totalPrice } = useSelector((state) => state.cartSlice);
+export default function Header() {
+  const { items, totalPrice } = useSelector(selectCart);
   const totalCount = items.reduce((count, item) => count + item.count, 0);
 
   return (
@@ -20,7 +21,7 @@ export default function Header({ searchValue, setSearchValue }) {
             </div>
           </div>
         </Link>
-        <Search searchValue={searchValue} setSearchValue={setSearchValue} />
+        <Search />
         <div className="header__cart">
           <Link to="/cart" className="button button--cart">
             <span>{totalPrice} ₽</span>

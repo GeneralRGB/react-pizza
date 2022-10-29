@@ -1,8 +1,6 @@
 // Modules
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-// import { useSelector, useDispatch } from "react-redux";
-// import { decrement, increment } from "./redux/slices/filterSlice";
 
 // Styles
 import "./scss/app.scss";
@@ -13,19 +11,14 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import Cart from "./pages/Cart";
 
-function App() {
-  const [searchValue, setSearchValue] = React.useState("");
-
-  // const count = useSelector((state) => state.filterSlice.value);
-  // const dispatch = useDispatch();
-
+export default function App() {
   return (
     <div className="wrapper">
-      <Header searchValue={searchValue} setSearchValue={setSearchValue} />
+      <Header />
       <div className="content">
         <div className="container">
           <Routes>
-            <Route path="/" element={<Home searchValue={searchValue} />} />
+            <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -34,5 +27,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

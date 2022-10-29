@@ -1,16 +1,20 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import debounce from "lodash.debounce";
 
+import { setSearchValue } from "../../redux/slices/filterSlice";
 import styles from "./search.module.scss";
 
-export default function Search({ searchValue, setSearchValue }) {
+export default function Search() {
+  const dispatch = useDispatch();
+
   const pizzaSearch = React.useRef();
   const [visibleSearchValue, setVisibleSearchValue] = React.useState("");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const sendFilterRequest = React.useCallback(
     debounce((text) => {
-      setSearchValue(text);
+      dispatch(setSearchValue(text.trim()));
     }, 300),
     []
   );
@@ -21,7 +25,7 @@ export default function Search({ searchValue, setSearchValue }) {
   };
 
   const clearSearch = () => {
-    setSearchValue("");
+    dispatch(setSearchValue(""));
     setVisibleSearchValue("");
     pizzaSearch.current.focus();
   };

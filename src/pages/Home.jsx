@@ -11,7 +11,7 @@ import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
 
 // Redux
-import { setFilters } from "../redux/slices/filterSlice";
+import { selectFilter, setFilters } from "../redux/slices/filterSlice";
 import { fetchPizzas } from "../redux/slices/pizzaSlice";
 
 // Data
@@ -22,9 +22,10 @@ const sortOptions = [
 ];
 const apiURL = "https://6307af893a2114bac76922d9.mockapi.io/photos/react-pizza";
 
-export default function Home({ searchValue }) {
+export default function Home() {
   // Redux
-  const sortSlice = useSelector((state) => state.filterSlice);
+  const sortSlice = useSelector(selectFilter);
+  const searchValue = sortSlice.searchValue;
   const dispatch = useDispatch();
   const { items, status } = useSelector((state) => state.pizzaSlice);
 
