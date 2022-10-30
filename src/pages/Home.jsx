@@ -20,7 +20,8 @@ const sortOptions = [
   { name: "цене", sortParam: "price" },
   { name: "алфавиту", sortParam: "title" },
 ];
-const apiURL = "https://6307af893a2114bac76922d9.mockapi.io/photos/react-pizza";
+export const apiURL =
+  "https://6307af893a2114bac76922d9.mockapi.io/photos/react-pizza";
 
 export default function Home() {
   // Redux
