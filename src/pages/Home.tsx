@@ -14,8 +14,13 @@ import Pagination from "../components/Pagination";
 import { selectFilter, setFilters } from "../redux/slices/filterSlice";
 import { fetchPizzas } from "../redux/slices/pizzaSlice";
 
+type SortListItem = {
+  name: string;
+  sortParam: string;
+};
+
 // Data
-const sortOptions = [
+export const sortOptions: SortListItem[] = [
   { name: "популярности", sortParam: "rating" },
   { name: "цене", sortParam: "price" },
   { name: "алфавиту", sortParam: "title" },
@@ -23,12 +28,12 @@ const sortOptions = [
 export const apiURL =
   "https://6307af893a2114bac76922d9.mockapi.io/photos/react-pizza";
 
-export default function Home() {
+const Home: React.FC = () => {
   // Redux
   const sortSlice = useSelector(selectFilter);
   const searchValue = sortSlice.searchValue;
   const dispatch = useDispatch();
-  const { items, status } = useSelector((state) => state.pizzaSlice);
+  const { items, status } = useSelector((state: any) => state.pizzaSlice);
 
   // Hooks
   const navigate = useNavigate();
@@ -66,6 +71,7 @@ export default function Home() {
     const fetchParams = category + search + sort;
 
     // Requesting pizzas & page count
+    // @ts-ignore
     dispatch(fetchPizzas({ apiURL, pages, fetchParams }));
 
     window.scrollTo(0, 0);
@@ -96,7 +102,7 @@ export default function Home() {
   const skeletons = [...new Array(4)].map((_, index) => (
     <Skeleton key={index} />
   ));
-  const pizzaElements = items.map((item) => (
+  const pizzaElements = items.map((item: any) => (
     <PizzaBlock key={item.id} {...item} />
   ));
 
@@ -104,7 +110,7 @@ export default function Home() {
     <>
       <div className="content__top">
         <Categories />
-        <Sort sortOptions={sortOptions} />
+        <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
@@ -119,4 +125,6 @@ export default function Home() {
       <Pagination />
     </>
   );
-}
+};
+
+export default Home;

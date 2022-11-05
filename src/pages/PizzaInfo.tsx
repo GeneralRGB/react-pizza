@@ -1,13 +1,17 @@
 import axios from "axios";
-import React from "react";
+import React, { ReactElement } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import { apiURL } from "./Home";
 
-export default function PizzaInfo() {
+export default function PizzaInfo(): ReactElement {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [pizza, setPizza] = React.useState();
+  const [pizza, setPizza] = React.useState<{
+    imageUrl: string;
+    title: string;
+    price: number;
+  }>();
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +26,9 @@ export default function PizzaInfo() {
     fetchData();
   }, [id, navigate]);
 
-  if (!pizza) return <h2>Loading...</h2>;
+  if (!pizza) {
+    return <h2>Loading...</h2>;
+  };
 
   return (
     <div className="container">

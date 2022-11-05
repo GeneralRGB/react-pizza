@@ -7,7 +7,7 @@ import {
   setCurrentPage,
 } from "../redux/slices/filterSlice";
 
-const categories = [
+const categories: string[] = [
   "Все",
   "Мясные",
   "Вегетарианская",
@@ -15,7 +15,7 @@ const categories = [
   "Острые",
   "Закрытые",
 ];
-export default function Categories() {
+const Categories: React.FC = () => {
   const categoriesSlice = useSelector(selectFilter);
   const dispatch = useDispatch();
 
@@ -38,3 +38,5 @@ export default function Categories() {
     </div>
   );
 }
+
+export default Categories;

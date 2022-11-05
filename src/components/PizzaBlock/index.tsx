@@ -6,10 +6,26 @@ import { addItem, selectCartItem } from "../../redux/slices/cartSlice";
 
 const pizzaTypes = ["Тонкое", "Традиционное"];
 
-function PizzaBlock({ id, title, price, imageUrl, types, sizes }) {
+type PizzaBlockProps = {
+  id: string;
+  title: string;
+  price: number;
+  imageUrl: string;
+  types: number[];
+  sizes: number[];
+};
+
+const PizzaBlock: React.FC<PizzaBlockProps> = ({
+  id,
+  title,
+  price,
+  imageUrl,
+  types,
+  sizes,
+}) => {
   // Hooks
-  const [pizzaType, setType] = React.useState(0);
-  const [pizzaSize, setSize] = React.useState(0);
+  const [pizzaType, setType] = React.useState<number>(0);
+  const [pizzaSize, setSize] = React.useState<number>(0);
   const dispatch = useDispatch();
   const itemSlice = useSelector(selectCartItem(id));
 
@@ -79,6 +95,6 @@ function PizzaBlock({ id, title, price, imageUrl, types, sizes }) {
       </div>
     </div>
   );
-}
+};
 
 export default PizzaBlock;

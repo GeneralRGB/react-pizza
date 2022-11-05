@@ -8,7 +8,7 @@ import styles from "./pagination.module.scss";
 export default function Pagination() {
   const dispatch = useDispatch();
 
-  const { pagesAmount } = useSelector((state) => state.pizzaSlice);
+  const { pagesAmount } = useSelector((state: any) => state.pizzaSlice);
 
   return (
     <ReactPaginate
@@ -19,7 +19,6 @@ export default function Pagination() {
       onPageChange={(event) => dispatch(setCurrentPage(event.selected + 1))}
       pageRangeDisplayed={4}
       pageCount={pagesAmount}
-      renderOnZeroPageCount={null}
     />
   );
 }

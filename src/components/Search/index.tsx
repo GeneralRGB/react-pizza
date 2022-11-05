@@ -8,18 +8,18 @@ import styles from "./search.module.scss";
 export default function Search() {
   const dispatch = useDispatch();
 
-  const pizzaSearch = React.useRef();
+  const pizzaSearch = React.useRef<HTMLInputElement>(null);
   const [visibleSearchValue, setVisibleSearchValue] = React.useState("");
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const sendFilterRequest = React.useCallback(
-    debounce((text) => {
+    debounce((text: string) => {
       dispatch(setSearchValue(text.trim()));
     }, 300),
     []
   );
 
-  const useSearch = (event) => {
+  const useSearch: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setVisibleSearchValue(event.target.value);
     sendFilterRequest(event.target.value);
   };
@@ -27,7 +27,7 @@ export default function Search() {
   const clearSearch = () => {
     dispatch(setSearchValue(""));
     setVisibleSearchValue("");
-    pizzaSearch.current.focus();
+    pizzaSearch.current?.focus();
   };
 
   return (
