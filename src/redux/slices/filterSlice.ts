@@ -76,5 +76,8 @@ export const {
 } = filterSlice.actions;
 
 export const selectFilter = (state: RootState) => state.filterSlice;
+export const selectCategoryId = (state: RootState) =>
+	state.filterSlice.categoryId;
+export const selectSortType = (state: RootState) => state.filterSlice.sortType;
 
 export default filterSlice.reducer;

@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import {
-	selectFilter,
+	selectSortType,
 	setIsSortTypeAsc,
 	setSortId,
 } from '../redux/slices/filterSlice';
@@ -10,10 +10,9 @@ import {
 import { sortOptions } from '../pages/Home';
 import { useAppDispatch } from '../redux/store';
 
-function Sort() {
+const Sort: React.FC = React.memo(() => {
 	const dispatch = useAppDispatch();
-	const sort = useSelector(selectFilter);
-
+	const sortType = useSelector(selectSortType);
 	// Hooks
 	const [isVisible, setIsVisible] = React.useState(false);
 	const sortRef = React.useRef<HTMLDivElement>(null);
@@ -22,7 +21,7 @@ function Sort() {
 	React.useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			const _event = event as MouseEvent & { path: Node[] };
-			if (sortRef.current && !_event.path.includes(sortRef.current))
+			if (sortRef.current && !_event.composedPath().includes(sortRef.current))
 				setIsVisible(false);
 		};
 		window.document.body.addEventListener('click', handleClickOutside);
@@ -41,7 +40,7 @@ function Sort() {
 		<div className="sort" ref={sortRef}>
 			<div className="sort__label">
 				<svg
-					className={sort.sortType.isSortTypeAsc ? 'ascending' : ''}
+					className={sortType.isSortTypeAsc ? 'ascending' : ''}
 					width="10"
 					height="6"
 					viewBox="0 0 10 6"
@@ -55,7 +54,7 @@ function Sort() {
 				</svg>
 				<b>Сортировка по:</b>
 				<span onClick={() => setIsVisible((prev) => !prev)}>
-					{sortOptions[sort.sortType.sortTypeId].name}
+					{sortOptions[sortType.sortTypeId].name}
 				</span>
 			</div>
 			{isVisible && (
@@ -63,11 +62,11 @@ function Sort() {
 					<ul>
 						{sortOptions.map((option, index) => (
 							<li
-								className={index === sort.sortType.sortTypeId ? 'active' : ''}
+								className={index === sortType.sortTypeId ? 'active' : ''}
 								key={option.name}
 								onClick={() => {
-									index === sort.sortType.sortTypeId
-										? dispatch(setIsSortTypeAsc(!sort.sortType.isSortTypeAsc))
+									index === sortType.sortTypeId
+										? dispatch(setIsSortTypeAsc(!sortType.isSortTypeAsc))
 										: dispatch(setIsSortTypeAsc(true));
 									setSortOption(index);
 								}}
@@ -80,5 +79,5 @@ function Sort() {
 			)}
 		</div>
 	);
-}
+});
 export default Sort;
