@@ -8,9 +8,25 @@ interface CartItem {
 	items: TCartItem[];
 }
 
+const loadCart = (): [] => {
+	const JSONpizzas = localStorage.getItem('cart');
+	if (!JSONpizzas) return [];
+
+	const pizzas = JSON.parse(JSONpizzas);
+	if (typeof pizzas !== 'string') {
+		return pizzas;
+	} else {
+		return [];
+	}
+};
+
+const loadedCart = loadCart() as TCartItem[];
+const calcTotalPrice = (items: TCartItem[]): number =>
+	items.reduce((sum, item) => sum + item.price * item.count, 0);
+
 const initialState: CartItem = {
-	totalPrice: 0,
-	items: [],
+	totalPrice: calcTotalPrice(loadedCart),
+	items: loadedCart,
 };
 
 const cartSlice = createSlice({
@@ -23,10 +39,7 @@ const cartSlice = createSlice({
 				? itemFound.count++
 				: state.items.push({ ...payload, count: 1 });
 
-			state.totalPrice = state.items.reduce(
-				(sum, item) => sum + item.price * item.count,
-				0
-			);
+			state.totalPrice = calcTotalPrice(state.items);
 		},
 
 		removeItem: (state, { payload }: PayloadAction<string>) => {
