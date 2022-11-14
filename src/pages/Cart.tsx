@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 
 import CartItem from '../components/CartItem';
 import { useAppDispatch } from '../redux/store';
-import { clearItems, selectCart } from '../redux/slices/cartSlice';
+import { clearItems } from '../redux/slices/cart/slice';
+import { selectCart } from '../redux/slices/cart/selectors';
 import CartEmpty from '../components/CartEmpty';
 
 const Cart = () => {

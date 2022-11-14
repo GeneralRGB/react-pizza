@@ -11,13 +11,11 @@ import Skeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/Pagination';
 
 // Redux
-import {
-	selectFilter,
-	setFilters,
-	SortingParams,
-} from '../redux/slices/filterSlice';
-import { fetchPizzas } from '../redux/slices/pizzaSlice';
 import { useAppDispatch } from '../redux/store';
+import { setFilters } from '../redux/slices/filter/slice';
+import { fetchPizzas } from '../redux/slices/pizza/functions';
+import { selectFilter } from '../redux/slices/filter/selectors';
+import { SortingParams } from '../redux/slices/filter/types';
 
 type SortListItem = {
 	name: string;

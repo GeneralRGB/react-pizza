@@ -3,7 +3,7 @@ import {
 	addItem,
 	decrementItemCount,
 	removeItem,
-} from '../redux/slices/cartSlice';
+} from '../redux/slices/cart/slice';
 import { useAppDispatch } from '../redux/store';
 
 export type TCartItem = {

@@ -1,14 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import {
-	selectSortType,
-	setIsSortTypeAsc,
-	setSortId,
-} from '../redux/slices/filterSlice';
+import { setIsSortTypeAsc, setSortId } from '../redux/slices/filter/slice';
 
 import { sortOptions } from '../pages/Home';
 import { useAppDispatch } from '../redux/store';
+import { selectSortType } from '../redux/slices/filter/selectors';
 
 const Sort: React.FC = React.memo(() => {
 	const dispatch = useAppDispatch();

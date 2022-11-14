@@ -1,11 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import {
-	selectCategoryId,
-	setCategoryId,
-	setCurrentPage,
-} from '../redux/slices/filterSlice';
+import { setCategoryId, setCurrentPage } from '../redux/slices/filter/slice';
+import { selectCategoryId } from '../redux/slices/filter/selectors';
 import { useAppDispatch } from '../redux/store';
 
 const categories: string[] = [
