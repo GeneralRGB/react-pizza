@@ -6,10 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import './scss/app.scss';
 
 // Components
-import Home from './pages/Home';
-// import NotFound from './pages/NotFound';
-// import Cart from "./pages/Cart";
-// import PizzaInfo from './pages/PizzaInfo';
+import { Home } from './pages';
 import MainLayout from './layouts/MainLayout';
 
 // Lazy loading configuration
